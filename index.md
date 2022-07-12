@@ -2,6 +2,6 @@
 
 You can calculate your Grade Point Average on this website.
 
-<a href="https://keremio.github.io/gpawebsite/about.html" title="GPA Calculator">Click Here!</a>
+<a href="https://keremio.github.io/gpawebsite/gpacalculator.html" title="GPA Calculator">Click Here!</a>
 
 
