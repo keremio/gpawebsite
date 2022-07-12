@@ -1,0 +1,393 @@
+<script>
+function gpacalculator() {
+	var number_of_courses = 0;
+	var i = 0
+	var sign_of_sufficiency = 0;
+	const ids_of_courses = ["C1","C2","C3","C4","C5","C6","C7","C8","C9","C10"];
+	const name_of_the_credits_of_courses = ["Cr1","Cr2","Cr3","Cr4","Cr5","Cr6","Cr7","Cr8","Cr9","Cr10"];
+	const name_of_letter_notes_of_courses = ["Ln1","Ln2","Ln3","Ln4","Ln5","Ln6","Ln7","Ln8","Ln9","Ln10"];
+	for (let i = 0; i < ids_of_courses.length; i++)
+	{
+		document.getElementById(ids_of_courses[i]).style.visibility = "hidden";
+		document.getElementById(name_of_the_credits_of_courses[i]).style.visibility = "hidden";
+		document.getElementById(name_of_letter_notes_of_courses[i]).style.visibility = "hidden";
+	}
+	number_of_courses = document.getElementById("Number of Courses").value;	
+	for (let i = 0; i < number_of_courses; i++)
+	{
+		document.getElementById(ids_of_courses[i]).style.visibility = "visible";
+		document.getElementById(name_of_the_credits_of_courses[i]).style.visibility = "visible";
+		document.getElementById(name_of_letter_notes_of_courses[i]).style.visibility = "visible";
+	}
+	var credits_of_courses = [0,0,0,0,0,0,0,0,0,0];
+	var letter_notes_of_courses = [0,0,0,0,0,0,0,0,0,0];
+	for (let i = 0; i < number_of_courses; i++)
+	{
+		if (document.getElementById(name_of_the_credits_of_courses[i]).value == "1 Credit")
+		{
+			credits_of_courses[i] = 1;
+		}
+		else if (document.getElementById(name_of_the_credits_of_courses[i]).value == "2 Credits")
+		{
+			credits_of_courses[i] = 2;
+		}
+		else if (document.getElementById(name_of_the_credits_of_courses[i]).value == "3 Credits")
+		{
+			credits_of_courses[i] = 3;
+		}
+		else if (document.getElementById(name_of_the_credits_of_courses[i]).value == "4 Credits")
+		{
+			credits_of_courses[i] = 4;
+		}
+		else if (document.getElementById(name_of_the_credits_of_courses[i]).value == "5 Credits")
+		{
+			credits_of_courses[i] = 5;
+		}
+		else if (document.getElementById(name_of_the_credits_of_courses[i]).value == "6 Credits")
+		{
+			credits_of_courses[i] = 6;
+		}
+		else if (document.getElementById(name_of_the_credits_of_courses[i]).value == "7 Credits")
+		{
+			credits_of_courses[i] = 7;
+		}
+		else if (document.getElementById(name_of_the_credits_of_courses[i]).value == "8 Credits")
+		{
+			credits_of_courses[i] = 8;
+		}
+		else
+		{
+			credits_of_courses[i] = 0;
+		}
+	}
+      for (let i = 0; i < number_of_courses; i++)
+	{
+		if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "AA")
+		{
+			letter_notes_of_courses[i] = 4.00;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "BA")
+		{
+			letter_notes_of_courses[i] = 3.50;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "BB")
+		{
+			letter_notes_of_courses[i] = 3.00;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "CB")
+		{
+			letter_notes_of_courses[i] = 2.50;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "CC")
+		{
+			letter_notes_of_courses[i] = 2.00;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "DC")
+		{
+			letter_notes_of_courses[i] = 1.50;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "DD")
+		{
+			letter_notes_of_courses[i] = 1.00;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "FD")
+		{
+			letter_notes_of_courses[i] = 0.50;
+			sign_of_sufficiency += 1;
+		}
+		else if (document.getElementById(name_of_letter_notes_of_courses[i]).value == "FF")
+		{
+			letter_notes_of_courses[i] = 0.00;
+			sign_of_sufficiency += 1;
+		}
+		else
+		{
+			letter_notes_of_courses[i] = 0.00;
+		}
+		
+	}
+	var Grade_Points = 0;
+	var Total_Credits = 0;
+	for (let i = 0; i < number_of_courses; i++)
+	{
+		Total_Credits += credits_of_courses[i];
+		Grade_Points += letter_notes_of_courses[i] * credits_of_courses[i];
+		localStorage.setItem("GPA", Grade_Points/Total_Credits);
+		localStorage.setItem("sign_of_sufficiency", sign_of_sufficiency);
+	}
+}
+function output_display()
+{
+	let sign_of_sufficiency = localStorage.getItem("sign_of_sufficiency");
+	let GPA = localStorage.getItem("GPA");
+	GPA = Math.round(GPA * 100) / 100;
+	document.getElementById("output").innerText = GPA;
+	if (GPA >= 3.5)
+  	{
+     		document.getElementById("comment").innerText = "are a high-honor student.";
+  	}
+  	else if (GPA < 3.5 && GPA >= 3.00)
+  	{
+    		document.getElementById("comment").innerText = "are a honor student.";
+  	}
+  	else if (GPA >= 2.00 && sign_of_sufficiency == 0)
+    	{
+		document.getElementById("comment").innerText = "are a satisfactory student.";
+  	}
+	else if (GPA >= 2.00 && sign_of_sufficiency > 0)
+	{
+		document.getElementById("comment").innerText = "are a sufficient student.";
+	}
+	else
+	{
+		document.getElementById("comment").innerText = "are a unsatisfactory student.";
+	}
+	
+}
+
+</script>
+<p> Please enter the number of courses which you take in this semester.</p>
+
+<p> <input id = "Number of Courses" type = "number" placeholder = "Number of Courses" oninput = gpacalculator(this.value)></p>
+
+<p> <input id = "C1" placeholder = "Course Name 1">  
+<select name = "Credits of Course 1" id = "Cr1" onchange = gpacalculator()> 
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 1" id = "Ln1" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+<p> <input id = "C2" placeholder = "Course Name 2">
+<select name = "Credits of Course 2" id = "Cr2" onchange = gpacalculator()>
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 2" id = "Ln2" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+<p> <input id = "C3" placeholder = "Course Name 3">
+<select name = "Credits of Course 3" id = "Cr3" onchange = gpacalculator()> 
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 3" id = "Ln3" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+
+<p> <input id = "C4" placeholder = "Course Name 4">
+<select name = "Credits of Course 4" id = "Cr4" onchange = gpacalculator()>
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 4" id = "Ln4" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+
+<p> <input id = "C5" placeholder = "Course Name 5">
+<select name = "Credits of Course 5" id = "Cr5" onchange = gpacalculator()>
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 5" id = "Ln5" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+
+<p> <input id = "C6" placeholder = "Course Name 6">
+<select name = "Credits of Course 6" id = "Cr6" onchange = gpacalculator()> 
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 6" id = "Ln6" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+
+<p> <input id = "C7" placeholder = "Course Name 7">
+ <select name = "Credits of Course 7" id = "Cr7" onchange = gpacalculator()> 
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 7" id = "Ln7" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+
+<p> <input id = "C8" placeholder = "Course Name 8">
+ <select name = "Credits of Course 8" id = "Cr8" onchange = gpacalculator()> 
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 8" id = "Ln8" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+
+<p> <input id = "C9" placeholder = "Course Name 9">
+<select name = "Credits of Course 9" id = "Cr9" onchange = gpacalculator()> 
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 9" id = "Ln9" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+
+<p> <input id = "C10" placeholder = "Course Name 10">
+<select name = "Credits of Course 10" id = "Cr10" onchange = gpacalculator()> 
+  <option value="1 Credit">1 Credit</option>
+  <option value="2 Credits">2 Credits</option>
+  <option value="3 Credits">3 Credits</option>
+  <option value="4 Credits">4 Credits</option>
+  <option value="5 Credits">5 Credits</option>
+  <option value="6 Credits">6 Credits</option>
+  <option value="7 Credits">7 Credits</option>
+  <option value="8 Credits">8 Credits</option>
+</select>
+<select name = "Letter Note of Course 10" id = "Ln10" onchange = gpacalculator()> 
+  <option value="AA">AA</option>
+  <option value="BA">BA</option>
+  <option value="BB">BB</option>
+  <option value="CB">CB</option>
+  <option value="CC">CC</option>
+  <option value="DC">DC</option>
+  <option value="DD">DD</option>
+  <option value="FD">FD</option>
+  <option value="FF">FF</option>
+</select>
+</p>
+<button onclick="output_display()">Click me</button>
+<p>
+   Grade Point Average: <span id = "output"> </span> </p>
+   <p> You <span id = "comment"> </span> </p>
